@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobivo · Jobivo</title>
+<meta name="robots" content="index, follow">
+<!-- Erzeugt aus src/lib/rechtstexte.ts – nicht von Hand ändern.
+     Werkzeug: node werkzeuge/rechtsseiten-bauen.mjs -->
+<style>
+:root {
+  --grund: #f7f4ef; --karte: #ffffff; --tinte: #131a24; --leise: #5b6675;
+  --handlung: #1d4ed8; --linie: #e4ded4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --grund: #10151d; --karte: #171e28; --tinte: #eef2f7; --leise: #9aa6b6;
+    --handlung: #93b4ff; --linie: #263140;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 32px 20px 72px;
+  background: var(--grund); color: var(--tinte);
+  font: 17px/1.62 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+main { max-width: 46rem; margin: 0 auto; }
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.4px; }
+.stand { color: var(--leise); font-size: 14px; margin: 0 0 32px; }
+h2 { font-size: 20px; margin: 34px 0 10px; }
+p { margin: 0 0 14px; }
+a { color: var(--handlung); }
+.karte {
+  background: var(--karte); border: 1px solid var(--linie);
+  border-radius: 14px; padding: 18px 20px; margin: 0 0 18px;
+}
+.warnung { border-color: #c2872a; }
+nav { margin: 40px 0 0; padding-top: 18px; border-top: 1px solid var(--linie); font-size: 15px; }
+nav a { margin-right: 18px; }
+footer { margin-top: 34px; color: var(--leise); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Jobivo</h1>
+<p class="stand">Minijobs für 14- bis 20-Jährige</p>
+
+<div class="karte">
+  <p>Jobivo bringt Jugendliche und Betriebe für Minijobs zusammen – mit eingebautem
+  Jugendarbeitsschutz, Elternfreigabe und geprüften Betrieben.</p>
+</div>
+<h2>Rechtliches</h2>
+<p><a href="./datenschutz.html">Datenschutzerklärung</a> ·
+<a href="./nutzungsbedingungen.html">Nutzungsbedingungen</a> ·
+<a href="./impressum.html">Impressum</a></p>
+<h2>Hilfe</h2>
+<p><a href="./hilfe.html">Hilfe &amp; Kontakt</a></p>
+<nav>
+  <a href="./index.html">Übersicht</a>
+  <a href="./datenschutz.html">Datenschutz</a>
+  <a href="./nutzungsbedingungen.html">Nutzungsbedingungen</a>
+  <a href="./impressum.html">Impressum</a>
+  <a href="./hilfe.html">Hilfe &amp; Kontakt</a>
+</nav>
+<footer>Jobivo – Minijobs für 14- bis 20-Jährige. Fassung 2026-08-29.</footer>
+</main>
+</body>
+</html>
