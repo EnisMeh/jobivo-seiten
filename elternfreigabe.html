@@ -50,41 +50,79 @@ button:disabled { opacity: 0.45; }
 .meldung.fehler { color: #b3382c; }
 </style>
 <script>
-  const haken = document.getElementById('zusage');
-  const knopf = document.getElementById('knopf');
+  const zurueckModus = new URLSearchParams(location.search).get('zurueck') === '1';
   const meldung = document.getElementById('meldung');
-  haken.addEventListener('change', () => { knopf.disabled = !haken.checked; });
-  knopf.addEventListener('click', async () => {
-    const token = decodeURIComponent(location.hash.slice(1));
-    if (!/^[0-9a-f]{64}$/i.test(token)) {
-      meldung.textContent = 'Der Link ist unvollständig. Bitte ihn noch einmal aus der E-Mail öffnen, ohne ihn zu kürzen.';
-      meldung.className = 'meldung fehler';
+  const erteilen = document.getElementById('erteilen');
+  const zurueck = document.getElementById('zurueck');
+  if (zurueckModus) { erteilen.hidden = true; zurueck.hidden = false; }
+
+  function tokenAusAdresse() {
+    const wert = decodeURIComponent(location.hash.slice(1));
+    return /^[0-9a-f]{64}$/i.test(wert) ? wert : null;
+  }
+
+  function schief(text) {
+    meldung.className = 'meldung fehler';
+    meldung.textContent = text;
+  }
+
+  async function senden(knopf, rumpf, danach) {
+    const token = tokenAusAdresse();
+    if (!token) {
+      schief('Der Link ist unvollständig. Bitte ihn noch einmal aus der E-Mail öffnen, ohne ihn zu kürzen.');
       return;
     }
-    knopf.disabled = true; meldung.className = 'meldung'; meldung.textContent = 'Einen Moment …';
+    knopf.disabled = true;
+    meldung.className = 'meldung';
+    meldung.textContent = 'Einen Moment …';
     try {
       const antwort = await fetch('https://dieoitlxqgmetuvgckdp.supabase.co/functions/v1/elternfreigabe-bestaetigen', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, bestaetigt: true }),
+        body: JSON.stringify(Object.assign({ token: token }, rumpf)),
       });
       const daten = await antwort.json();
-      if (!antwort.ok) throw new Error(daten.fehler || 'Die Freigabe wurde nicht gespeichert.');
+      if (!antwort.ok) throw new Error(daten.fehler || 'Das hat nicht geklappt.');
       history.replaceState(null, '', location.pathname);
-      document.getElementById('formular').remove();
-      meldung.textContent = 'Danke. Die Freigabe ist gespeichert. In der App wird der neue Stand von selbst sichtbar.';
+      danach(daten);
     } catch (f) {
       knopf.disabled = false;
-      meldung.className = 'meldung fehler';
-      meldung.textContent = f instanceof Error ? f.message : 'Das hat nicht geklappt.';
+      schief(f instanceof Error ? f.message : 'Das hat nicht geklappt.');
     }
+  }
+
+  const haken = document.getElementById('zusage');
+  const knopf = document.getElementById('knopf');
+  haken.addEventListener('change', function () { knopf.disabled = !haken.checked; });
+  knopf.addEventListener('click', function () {
+    senden(knopf, { bestaetigt: true, fassung: '2026-08-29' }, function (daten) {
+      erteilen.remove();
+      meldung.textContent = 'Danke. Die Freigabe ist gespeichert. In der App wird der neue Stand von selbst sichtbar.';
+      if (!daten.ruecknahme) return;
+      /* Der Link steht genau einmal hier. Er wird nicht noch einmal
+         verschickt und lässt sich später nicht nachfordern, weil der Server
+         nur seinen Hash kennt. Deshalb der ausdrückliche Hinweis. */
+      const kasten = document.getElementById('rueckhinweis');
+      const adresse = location.origin + location.pathname + '?zurueck=1#' + daten.ruecknahme;
+      document.getElementById('ruecklink').href = adresse;
+      document.getElementById('rueckadresse').textContent = adresse;
+      kasten.hidden = false;
+    });
+  });
+
+  const rueckKnopf = document.getElementById('rueckknopf');
+  rueckKnopf.addEventListener('click', function () {
+    senden(rueckKnopf, { zuruecknehmen: true }, function () {
+      zurueck.remove();
+      meldung.textContent = 'Die Freigabe ist zurückgenommen. Das Konto ist für Betriebe nicht mehr auffindbar.';
+    });
   });
 </script>
 </head>
 <body>
 <main>
 <h1>Elternfreigabe</h1>
-<p class="stand">Einwilligung nach Art. 8 DSGVO</p>
+<p class="stand">Einwilligung nach Art. 8 DSGVO · Fassung 2026-08-29</p>
 
 <div class="karte">
 <p><strong>Worum es geht.</strong> Eine oder einer unter 18 möchte Tirono nutzen, eine App für
@@ -107,17 +145,32 @@ Job entscheiden Sie weiterhin selbst, zusammen mit Ihrem Kind und dem Betrieb. W
 Arbeitszeiten und Tätigkeiten erlaubt, prüft die App vorher von allein.</p>
 </div>
 
-<div id="formular">
+<div id="erteilen">
 <label class="zusage"><input id="zusage" type="checkbox">
 <span>Ich bin sorgeberechtigt und stimme der Verarbeitung der Daten zu.</span></label>
 <button id="knopf" type="button" disabled>Freigabe erteilen</button>
 </div>
+
+<div id="zurueck" hidden>
+<h2>Freigabe zurücknehmen</h2>
+<p>Danach ist das Konto Ihres Kindes für Betriebe nicht mehr auffindbar, und wartende Anfragen
+gehen nicht weiter. Was ein Betrieb bereits gesehen hat, lässt sich nicht zurückholen.</p>
+<button id="rueckknopf" type="button">Freigabe zurücknehmen</button>
+</div>
+
 <div id="meldung" class="meldung" role="status" aria-live="polite"></div>
 
-<h2>Wie Sie es zurücknehmen</h2>
-<p>Jederzeit und ohne Begründung, mit einer formlosen Nachricht an
-<a href="mailto:kontakt@tirono.de">kontakt@tirono.de</a>. Danach ist das Konto Ihres Kindes für Betriebe nicht
-mehr auffindbar. Der Link auf dieser Seite gilt 24 Stunden und lässt sich nur einmal benutzen.</p>
+<div class="karte" id="rueckhinweis" hidden>
+<p><strong>Diesen Link bitte aufbewahren.</strong> Damit nehmen Sie die Freigabe später mit einem
+Klick zurück. Er steht nur hier und lässt sich nicht noch einmal anfordern, weil wir ihn nicht
+im Klartext speichern.</p>
+<p><a id="ruecklink" href="#"><span id="rueckadresse"></span></a></p>
+</div>
+
+<h2>Wie Sie es sonst zurücknehmen</h2>
+<p>Auch ohne den Link jederzeit und ohne Begründung, mit einer formlosen Nachricht an
+<a href="mailto:kontakt@tirono.de">kontakt@tirono.de</a>. Der Link auf dieser Seite gilt 24 Stunden und lässt
+sich nur einmal benutzen.</p>
 
 <nav>
   <a href="./index.html">Übersicht</a>
