@@ -49,6 +49,69 @@ button:disabled { opacity: 0.45; }
 .meldung { margin: 16px 0 0; font-weight: 600; }
 .meldung.fehler { color: #b3382c; }
 </style>
+</head>
+<body>
+<main>
+<h1>Elternfreigabe</h1>
+<p class="stand">Einwilligung nach Art. 8 DSGVO · Fassung 2026-08-29</p>
+
+<div class="karte">
+<p><strong>Worum es geht.</strong> Eine oder einer unter 18 möchte Tirono nutzen, eine App für
+Minijobs, Nebenjobs und Praktika ab 14. Wer das ist, steht im Betreff der E-Mail, über die Sie
+hierhergekommen sind.</p>
+</div>
+
+<h2>Wozu Sie zustimmen</h2>
+<p>Allein dazu, dass wir die Daten Ihres Kindes verarbeiten dürfen. Für Menschen unter 16 Jahren
+verlangt das Gesetz dafür die Einwilligung eines Elternteils (Art. 8 DSGVO). Wir holen sie bis 18
+ein, weil bis dahin ohnehin Sie den Arbeitsvertrag mitunterschreiben.</p>
+<p>Verarbeitet werden Name, Geburtsdatum, Wohnort, Schulangaben und was Ihr Kind selbst über sich
+schreibt. Ein Betrieb sieht davon erst etwas, wenn Ihr Kind ihn selbst anfragt. Näheres steht in
+der <a href="./datenschutz.html">Datenschutzerklärung</a>.</p>
+
+<h2>Wozu Sie nicht zustimmen</h2>
+<div class="karte warnung">
+<p><strong>Diese Freigabe ist keine Zustimmung zu einer Arbeitsstelle.</strong> Über jeden einzelnen
+Job entscheiden Sie weiterhin selbst, zusammen mit Ihrem Kind und dem Betrieb. Was das Gesetz an
+Arbeitszeiten und Tätigkeiten erlaubt, prüft die App vorher von allein.</p>
+</div>
+
+<div id="erteilen">
+<label class="zusage"><input id="zusage" type="checkbox">
+<span>Ich bin sorgeberechtigt und stimme der Verarbeitung der Daten zu.</span></label>
+<button id="knopf" type="button" disabled>Freigabe erteilen</button>
+</div>
+
+<div id="zurueck" hidden>
+<h2>Freigabe zurücknehmen</h2>
+<p>Danach ist das Konto Ihres Kindes für Betriebe nicht mehr auffindbar, und wartende Anfragen
+gehen nicht weiter. Was ein Betrieb bereits gesehen hat, lässt sich nicht zurückholen.</p>
+<button id="rueckknopf" type="button">Freigabe zurücknehmen</button>
+</div>
+
+<div id="meldung" class="meldung" role="status" aria-live="polite"></div>
+
+<div class="karte" id="rueckhinweis" hidden>
+<p><strong>Diesen Link bitte aufbewahren.</strong> Damit nehmen Sie die Freigabe später mit einem
+Klick zurück. Er steht nur hier und lässt sich nicht noch einmal anfordern, weil wir ihn nicht
+im Klartext speichern.</p>
+<p><a id="ruecklink" href="#"><span id="rueckadresse"></span></a></p>
+</div>
+
+<h2>Wie Sie es sonst zurücknehmen</h2>
+<p>Auch ohne den Link jederzeit und ohne Begründung, mit einer formlosen Nachricht an
+<a href="mailto:kontakt@tirono.de">kontakt@tirono.de</a>. Der Link auf dieser Seite gilt 24 Stunden und lässt
+sich nur einmal benutzen.</p>
+
+<nav>
+  <a href="./index.html">Übersicht</a>
+  <a href="./datenschutz.html">Datenschutz</a>
+  <a href="./nutzungsbedingungen.html">Nutzungsbedingungen</a>
+  <a href="./impressum.html">Impressum</a>
+  <a href="./hilfe.html">Hilfe &amp; Kontakt</a>
+</nav>
+<footer>Tirono: Minijobs, Nebenjobs und Praktika ab 14. Fassung 2026-08-29.</footer>
+</main>
 <script>
   const zurueckModus = new URLSearchParams(location.search).get('zurueck') === '1';
   const meldung = document.getElementById('meldung');
@@ -118,68 +181,5 @@ button:disabled { opacity: 0.45; }
     });
   });
 </script>
-</head>
-<body>
-<main>
-<h1>Elternfreigabe</h1>
-<p class="stand">Einwilligung nach Art. 8 DSGVO · Fassung 2026-08-29</p>
-
-<div class="karte">
-<p><strong>Worum es geht.</strong> Eine oder einer unter 18 möchte Tirono nutzen, eine App für
-Minijobs, Nebenjobs und Praktika ab 14. Wer das ist, steht im Betreff der E-Mail, über die Sie
-hierhergekommen sind.</p>
-</div>
-
-<h2>Wozu Sie zustimmen</h2>
-<p>Allein dazu, dass wir die Daten Ihres Kindes verarbeiten dürfen. Für Menschen unter 16 Jahren
-verlangt das Gesetz dafür die Einwilligung eines Elternteils (Art. 8 DSGVO). Wir holen sie bis 18
-ein, weil bis dahin ohnehin Sie den Arbeitsvertrag mitunterschreiben.</p>
-<p>Verarbeitet werden Name, Geburtsdatum, Wohnort, Schulangaben und was Ihr Kind selbst über sich
-schreibt. Ein Betrieb sieht davon erst etwas, wenn Ihr Kind ihn selbst anfragt. Näheres steht in
-der <a href="./datenschutz.html">Datenschutzerklärung</a>.</p>
-
-<h2>Wozu Sie nicht zustimmen</h2>
-<div class="karte warnung">
-<p><strong>Diese Freigabe ist keine Zustimmung zu einer Arbeitsstelle.</strong> Über jeden einzelnen
-Job entscheiden Sie weiterhin selbst, zusammen mit Ihrem Kind und dem Betrieb. Was das Gesetz an
-Arbeitszeiten und Tätigkeiten erlaubt, prüft die App vorher von allein.</p>
-</div>
-
-<div id="erteilen">
-<label class="zusage"><input id="zusage" type="checkbox">
-<span>Ich bin sorgeberechtigt und stimme der Verarbeitung der Daten zu.</span></label>
-<button id="knopf" type="button" disabled>Freigabe erteilen</button>
-</div>
-
-<div id="zurueck" hidden>
-<h2>Freigabe zurücknehmen</h2>
-<p>Danach ist das Konto Ihres Kindes für Betriebe nicht mehr auffindbar, und wartende Anfragen
-gehen nicht weiter. Was ein Betrieb bereits gesehen hat, lässt sich nicht zurückholen.</p>
-<button id="rueckknopf" type="button">Freigabe zurücknehmen</button>
-</div>
-
-<div id="meldung" class="meldung" role="status" aria-live="polite"></div>
-
-<div class="karte" id="rueckhinweis" hidden>
-<p><strong>Diesen Link bitte aufbewahren.</strong> Damit nehmen Sie die Freigabe später mit einem
-Klick zurück. Er steht nur hier und lässt sich nicht noch einmal anfordern, weil wir ihn nicht
-im Klartext speichern.</p>
-<p><a id="ruecklink" href="#"><span id="rueckadresse"></span></a></p>
-</div>
-
-<h2>Wie Sie es sonst zurücknehmen</h2>
-<p>Auch ohne den Link jederzeit und ohne Begründung, mit einer formlosen Nachricht an
-<a href="mailto:kontakt@tirono.de">kontakt@tirono.de</a>. Der Link auf dieser Seite gilt 24 Stunden und lässt
-sich nur einmal benutzen.</p>
-
-<nav>
-  <a href="./index.html">Übersicht</a>
-  <a href="./datenschutz.html">Datenschutz</a>
-  <a href="./nutzungsbedingungen.html">Nutzungsbedingungen</a>
-  <a href="./impressum.html">Impressum</a>
-  <a href="./hilfe.html">Hilfe &amp; Kontakt</a>
-</nav>
-<footer>Tirono: Minijobs, Nebenjobs und Praktika ab 14. Fassung 2026-08-29.</footer>
-</main>
 </body>
 </html>
